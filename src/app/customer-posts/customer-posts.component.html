@@ -1,0 +1,12 @@
+<div class="flex justify-center items-center min-h-screen flex-wrap">
+  @for (post of postsService.customerPosts$ | async; track $index) {
+    <div class="inline-block max-w-xs rounded-xl shadow-md overflow-hidden my-3 mx-6 w-64 h-80 bg-purple-300">
+      <div class="bg-purple-500 p-4">
+        <h2 class="text-xl font-bold">{{post.title}}</h2>
+      </div>
+      <div class="p-4 bg-purple-300">
+        <p>{{post.body}}</p>
+      </div>
+    </div>
+  }
+</div>
