@@ -1,19 +1,53 @@
 import {Component, OnInit} from '@angular/core';
-import {PostsService} from "../posts/services/posts.service";
 import {TodolistService} from "./services/todolist.service";
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef,
+  MatTable
+} from "@angular/material/table";
+import {MatButton} from "@angular/material/button";
+import {animate, state, style, transition, trigger} from "@angular/animations";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'app-customer-to-do-list',
   standalone: true,
-  imports: [],
+    imports: [
+        MatTable,
+        MatHeaderCell,
+        MatColumnDef,
+        MatHeaderCellDef,
+        MatCellDef,
+        MatCell,
+        MatButton,
+        MatHeaderRow,
+        MatHeaderRowDef,
+        MatRowDef,
+        MatRow,
+        MatProgressSpinner
+    ],
   templateUrl: './customer-to-do-list.component.html',
-  styleUrl: './customer-to-do-list.component.css'
+  styleUrl: './customer-to-do-list.component.css',
+  animations: [
+    trigger('scaleAnimation', [
+      state('small', style({ transform: 'scale(1)' })),
+      state('large', style({ transform: 'scale(1.1)' })),
+      transition('small <=> large', animate('200ms ease-in'))
+    ])
+  ]
 })
 export class CustomerToDoListComponent implements OnInit{
-  constructor(public todolistService: TodolistService) { }
+  displayedColumns: string[] = ['authorName', 'title', 'completed'];
+  isLoading: boolean = false;
+  constructor(public todolistService: TodolistService ) { }
 
   ngOnInit(): void {
-    // this.todolistService.loadToDoList().subscribe();
+    this.todolistService.isLoading$.subscribe((bool)=>{
+      this.isLoading = bool
+    })
   }
-
 }

@@ -11,12 +11,14 @@ import {CustomersService} from "../../customers/services/customers.service";
 export class TodolistService {
   private readonly BASE_URL = 'https://jsonplaceholder.typicode.com/';
   customerTasks$: BehaviorSubject<Task[]> = new BehaviorSubject<Task[]>([]);
+  isLoading$: BehaviorSubject<boolean> =new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient, private customersService: CustomersService) {
   }
 
 
   loadToDoListByCustomer(id: Task['userId']): Observable<Task[]> {
+    this.isLoading$.next(true);
     return this.http.get<Task[]>(`${this.BASE_URL}todos?userId=${id}`).pipe(
       switchMap((tasks: Task[]) =>
         this.customersService.getCustomers().pipe(
@@ -33,6 +35,7 @@ export class TodolistService {
       ),
       tap((tasksWithAuthors: Task[]) => {
         this.customerTasks = tasksWithAuthors;
+        this.isLoading$.next(false);
       })
     );
   }

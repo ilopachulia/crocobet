@@ -11,6 +11,7 @@ export class CustomersService {
   private readonly BASE_URL = 'https://jsonplaceholder.typicode.com/';
 
   customers$ = new BehaviorSubject<Customer[]>([]);
+  private allCustomers: Customer[] = [];
 
   constructor(private http: HttpClient) {}
 
@@ -31,6 +32,7 @@ export class CustomersService {
       })),
       tap(transformedCustomers => {
         if (transformedCustomers) {
+          this.allCustomers = transformedCustomers;
           this.customers$.next(transformedCustomers);
         }
       })
@@ -39,5 +41,14 @@ export class CustomersService {
 
   get customers(){
     return this.customers$.getValue()
+  }
+
+  filterCustomers(searchValue: string): void {
+    const filteredCustomers = this.allCustomers.filter(customer =>
+      customer.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+      customer.surname.toLowerCase().includes(searchValue.toLowerCase()) ||
+      customer.email.toLowerCase().includes(searchValue.toLowerCase())
+    );
+    this.customers$.next(filteredCustomers);
   }
 }

@@ -1,7 +1,7 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, Inject, inject, OnInit} from '@angular/core';
 import {MatButtonModule} from "@angular/material/button";
 import {
-  MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent,
+  MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogClose, MatDialogContent,
   MatDialogRef, MatDialogTitle,
 } from "@angular/material/dialog";
 import {Post} from "../posts/types";
@@ -18,17 +18,7 @@ export interface DialogData {
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.css'],
 })
-export class ModalComponent implements OnInit {
-  readonly dialogRef = inject(MatDialogRef<ModalComponent>);
-  readonly data = inject<DialogData>(MAT_DIALOG_DATA);
+export class ModalComponent {
 
-  constructor() {}
-
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-
-  ngOnInit(): void {
-    console.log('data', this.data.post);
-  }
+  constructor(private dialogRef: MatDialogRef<ModalComponent>, @Inject(MAT_DIALOG_DATA) public data?: any) {}
 }

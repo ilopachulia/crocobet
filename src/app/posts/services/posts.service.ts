@@ -12,7 +12,7 @@ import {Customer} from "../../customers/types";
 export class PostsService {
   private readonly BASE_URL = 'https://jsonplaceholder.typicode.com/';
   posts$: BehaviorSubject<Post[]> = new BehaviorSubject<Post[]>([]);
-  customerPosts$ = new BehaviorSubject<Post[]>([]);
+  customerPosts$: BehaviorSubject<Post[]> = new BehaviorSubject<Post[]>([]);
   post$: BehaviorSubject<Post | null> = new BehaviorSubject<Post | null>(null);
 
 
