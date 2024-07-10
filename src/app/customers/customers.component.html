@@ -3,12 +3,6 @@
     <mat-spinner></mat-spinner>
   </div>
 } @else {
-  <div class="flex justify-start pl-6 w-full bg-purple-800">
-    <mat-form-field appearance="fill" class="w-full max-w-md">
-      <input matInput [(ngModel)]="searchValue" (keyup)="applyFilter()" placeholder="Search..." class="w-full">
-    </mat-form-field>
-  </div>
-
   <table mat-table [dataSource]="customersService.customers$" class="mat-elevation-z8">
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef>სახელი</th>

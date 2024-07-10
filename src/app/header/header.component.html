@@ -1,6 +1,17 @@
 <header class="flex justify-between items-center p-4 bg-purple-800 text-white">
   <div class="flex items-center space-x-4">
     <app-navigation></app-navigation>
+    @if (isCustomersPage) {
+      <div class="w-full max-w-md">
+        <input
+          type="text"
+          [(ngModel)]="searchValue"
+          (keyup)="applyFilter()"
+          placeholder="Search..."
+          class="w-full px-4 py-2 text-black border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+      </div>
+    }
   </div>
   <div>
     {{ currentDate | date:'MMMM d, y, h:mm:ss a' }}
