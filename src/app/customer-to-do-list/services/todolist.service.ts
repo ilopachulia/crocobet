@@ -1,21 +1,27 @@
-import { Injectable } from '@angular/core';
+import {Injectable, OnDestroy} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject, Observable} from "rxjs";
-import {switchMap, tap, map} from "rxjs/operators";
+import {BehaviorSubject, Observable, Subject} from "rxjs";
+import {switchMap, tap, map, takeUntil} from "rxjs/operators";
 import {Task} from "./types";
 import {CustomersService} from "../../customers/services/customers.service";
 
 @Injectable({
   providedIn: 'root'
 })
-export class TodolistService {
+export class TodolistService implements OnDestroy {
   private readonly BASE_URL = 'https://jsonplaceholder.typicode.com/';
   customerTasks$: BehaviorSubject<Task[]> = new BehaviorSubject<Task[]>([]);
   isLoading$: BehaviorSubject<boolean> =new BehaviorSubject<boolean>(false);
+  destroy$ = new Subject<void>();
+
 
   constructor(private http: HttpClient, private customersService: CustomersService) {
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   loadToDoListByCustomer(id: Task['userId']): Observable<Task[]> {
     this.isLoading$.next(true);
@@ -36,7 +42,8 @@ export class TodolistService {
       tap((tasksWithAuthors: Task[]) => {
         this.customerTasks = tasksWithAuthors;
         this.isLoading$.next(false);
-      })
+      }),
+      takeUntil(this.destroy$)
     );
   }
 

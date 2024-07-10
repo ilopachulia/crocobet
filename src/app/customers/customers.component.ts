@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -22,7 +22,9 @@ import {TodolistService} from "../customer-to-do-list/services/todolist.service"
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {ReactiveFormsModule} from "@angular/forms";
+import {Subject} from "rxjs";
+import {takeUntil} from "rxjs/operators";
 
 @Component({
   selector: 'app-customers',
@@ -33,17 +35,25 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
   animations: [trigger('scaleAnimation', [state('small', style({transform: 'scale(1)'})), state('large', style({transform: 'scale(1.1)'})), transition('small <=> large', animate('200ms ease-in'))])]
 })
 
-export class CustomersComponent implements OnInit {
+export class CustomersComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['name', 'surname', 'phoneNumber', 'email', 'companyName', 'postActions', 'taskActions'];
   buttonStates: { [id: string]: string } = {};
   isLoading: boolean = false;
+  destroy$: Subject<void> = new Subject<void>();
+
 
   constructor(public customersService: CustomersService, private todolistService: TodolistService, private router: Router) {
   }
 
   ngOnInit(): void {
     this.isLoading = true;
-    this.customersService.getCustomers().subscribe(() => this.isLoading = false,)
+    this.customersService.getCustomers().pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.isLoading = false,)
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   navigateToPosts(customerId: string): void {
