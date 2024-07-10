@@ -11,8 +11,9 @@ import {Customer} from "../../customers/types";
 })
 export class PostsService {
   private readonly BASE_URL = 'https://jsonplaceholder.typicode.com/';
-  posts$ = new BehaviorSubject<Post[]>([]);
+  posts$: BehaviorSubject<Post[]> = new BehaviorSubject<Post[]>([]);
   customerPosts$ = new BehaviorSubject<Post[]>([]);
+  post$: BehaviorSubject<Post | null> = new BehaviorSubject<Post | null>(null);
 
 
   constructor(private http: HttpClient, private customersService: CustomersService) {
@@ -35,6 +36,22 @@ export class PostsService {
     return this.http.get<Post[]>(`${this.BASE_URL}posts?userId=${id}`).pipe(tap((posts: Post[]) => {
       this.customerPosts = posts
     }))
+  }
+
+  loadPostById(id: string): Observable<Post> {
+    return this.http.get<Post>(`${this.BASE_URL}posts/${id}`).pipe(tap((post: Post) => {
+      this.post = post;
+    }))
+  }
+
+
+
+  set post(post: Post) {
+    this.post$.next(post);
+  }
+
+  get post(): Post | null {
+    return this.post$.getValue()
   }
 
   set customerPosts(posts: Post[]) {
