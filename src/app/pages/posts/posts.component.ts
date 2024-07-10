@@ -1,12 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {PostsService} from "./services/posts.service";
+import {PostsService} from "../../shared/services/posts.service";
 import {MatTableModule,} from "@angular/material/table";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 import {animate, state, style, transition, trigger} from "@angular/animations";
-import {TruncatePipe} from "../pipes/truncate.pipe";
+import {TruncatePipe} from "../../shared/pipes/truncate.pipe";
 import {MatDialog, MatDialogModule,} from "@angular/material/dialog";
-import {ModalComponent} from "../modal/modal.component";
+import {ModalComponent} from "../../components/modal/modal.component";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";

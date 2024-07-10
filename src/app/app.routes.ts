@@ -1,8 +1,8 @@
 import {Routes} from '@angular/router';
-import {PostsComponent} from "./posts/posts.component";
-import {CustomersComponent} from "./customers/customers.component";
-import {CustomerPostsComponent} from "./customer-posts/customer-posts.component";
-import {CustomerToDoListComponent} from "./customer-to-do-list/customer-to-do-list.component";
+import {PostsComponent} from "./pages/posts/posts.component";
+import {CustomersComponent} from "./pages/customers/customers.component";
+import {CustomerPostsComponent} from "./pages/customer-posts/customer-posts.component";
+import {CustomerToDoListComponent} from "./pages/customer-to-do-list/customer-to-do-list.component";
 
 export const routes: Routes = [
   {path: '', redirectTo: "customers", pathMatch: 'full'},

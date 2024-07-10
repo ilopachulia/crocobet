@@ -1,10 +1,10 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {BehaviorSubject, Observable, Subject} from "rxjs";
-import {Post} from "../types";
+import {Post} from "../../pages/posts/types";
 import {HttpClient} from "@angular/common/http";
 import {switchMap, takeUntil, tap} from 'rxjs/operators';
-import {CustomersService} from "../../customers/services/customers.service";
-import {Customer} from "../../customers/types";
+import {CustomersService} from "./customers.service";
+import {Customer} from "../../pages/customers/types";
 
 @Injectable({
   providedIn: 'root'

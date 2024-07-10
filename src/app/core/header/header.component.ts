@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Router, RouterLink} from "@angular/router";
 import {DatePipe} from "@angular/common";
-import {NavigationComponent} from "../navigation/navigation.component";
-import {CustomersService} from "../customers/services/customers.service";
+import {NavigationComponent} from "../../components/navigation/navigation.component";
+import {CustomersService} from "../../shared/services/customers.service";
 import {MatFormField} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";

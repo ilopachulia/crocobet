@@ -2,8 +2,8 @@ import {Injectable, OnDestroy} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {BehaviorSubject, Observable, Subject} from "rxjs";
 import {switchMap, tap, map, takeUntil} from "rxjs/operators";
-import {Task} from "./types";
-import {CustomersService} from "../../customers/services/customers.service";
+import {Task} from "../../pages/customer-to-do-list/types/types";
+import {CustomersService} from "./customers.service";
 
 @Injectable({
   providedIn: 'root'

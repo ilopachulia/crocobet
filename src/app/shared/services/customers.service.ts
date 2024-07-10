@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject, Observable } from "rxjs";
 import { map, tap } from "rxjs/operators";
-import { Customer, CustomerResponse } from "../types";
+import { Customer, CustomerResponse } from "../../pages/customers/types";
 
 @Injectable({
   providedIn: 'root'

@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {takeUntil, tap} from "rxjs/operators";
-import {PostsService} from "../posts/services/posts.service";
+import {PostsService} from "../../shared/services/posts.service";
 import {Subject} from "rxjs";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";

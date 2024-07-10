@@ -4,7 +4,7 @@ import {
   MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogClose, MatDialogContent,
   MatDialogRef, MatDialogTitle,
 } from "@angular/material/dialog";
-import {Post} from "../posts/types";
+import {Post} from "../../pages/posts/types";
 import {MatIcon} from "@angular/material/icon";
 
 export interface DialogData {
