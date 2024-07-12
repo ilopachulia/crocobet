@@ -40,14 +40,9 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
     ])
   ]
 })
-export class CustomerToDoListComponent implements OnInit{
+export class CustomerToDoListComponent {
   displayedColumns: string[] = ['authorName', 'title', 'completed'];
-  isLoading: boolean = false;
+  
   constructor(public todolistService: TodolistService ) { }
 
-  ngOnInit(): void {
-    this.todolistService.isLoading$.subscribe((bool)=>{
-      this.isLoading = bool
-    })
-  }
 }

@@ -2,9 +2,10 @@ import {Injectable, OnDestroy} from '@angular/core';
 import {BehaviorSubject, Observable, Subject} from "rxjs";
 import {Post} from "../../pages/posts/types";
 import {HttpClient} from "@angular/common/http";
-import {switchMap, takeUntil, tap} from 'rxjs/operators';
+import {switchMap, tap} from 'rxjs/operators';
 import {CustomersService} from "./customers.service";
 import {Customer} from "../../pages/customers/types";
+import {BASE_URL} from "../constants/base-url";
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +14,8 @@ export class PostsService implements OnDestroy {
   posts$: BehaviorSubject<Post[]> = new BehaviorSubject<Post[]>([]);
   customerPosts$: BehaviorSubject<Post[]> = new BehaviorSubject<Post[]>([]);
   post$: BehaviorSubject<Post | null> = new BehaviorSubject<Post | null>(null);
-  private readonly BASE_URL = 'https://jsonplaceholder.typicode.com/';
+  isLoading: boolean = false;
   private destroy$: Subject<void> = new Subject<void>();
-
 
   constructor(private http: HttpClient, private customersService: CustomersService) {
   }
@@ -50,7 +50,8 @@ export class PostsService implements OnDestroy {
   }
 
   loadPosts(): Observable<Customer[]> {
-    return this.http.get<Post[]>(`${this.BASE_URL}posts`).pipe(switchMap(posts => {
+    this.isLoading = true;
+    return this.http.get<Post[]>(`${BASE_URL}posts`).pipe(switchMap(posts => {
       return this.customersService.getCustomers().pipe(tap(customers => {
         this.posts = posts.map(post => {
           const author = customers.find(customer => customer.id === post.userId);
@@ -58,22 +59,27 @@ export class PostsService implements OnDestroy {
             ...post, authorName: author ? `${author.name} ${author.surname}` : 'Unknown Author'
           };
         });
-      }), takeUntil(this.destroy$));
-    }), takeUntil(this.destroy$));
+        this.isLoading = false;
+      }));
+    }));
   }
 
 
   loadPostsByCustomer(id: Post['userId']): Observable<Post[]> {
-    return this.http.get<Post[]>(`${this.BASE_URL}posts?userId=${id}`).pipe(
-      tap((posts: Post[]) => {
-        this.customerPosts = posts;
-      }),
-      takeUntil(this.destroy$)
-    );
+    this.isLoading = true;
+    return this.http.get<Post[]>(`${BASE_URL}posts?userId=${id}`).pipe(tap((posts: Post[]) => {
+      this.customerPosts = posts;
+      this.isLoading = false;
+    }));
   }
+
+
   loadPostById(id: string): Observable<Post> {
-    return this.http.get<Post>(`${this.BASE_URL}posts/${id}`).pipe(tap((post: Post) => {
+    this.isLoading = true;
+    return this.http.get<Post>(`${BASE_URL}posts/${id}`).pipe(tap((post: Post) => {
       this.post = post;
-    }), takeUntil(this.destroy$))
+      this.isLoading = false;
+    }));
   }
+
 }

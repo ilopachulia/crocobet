@@ -3,7 +3,7 @@ import {ActivatedRoute} from "@angular/router";
 import {takeUntil, tap} from "rxjs/operators";
 import {PostsService} from "../../shared/services/posts.service";
 import {Subject} from "rxjs";
-import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
+import {AsyncPipe,} from "@angular/common";
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
@@ -16,16 +16,15 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
 })
 export class CustomerPostsComponent implements OnInit, OnDestroy {
   destroy$ = new Subject()
-  isLoading: boolean = false;
 
   constructor(private route: ActivatedRoute, protected postsService: PostsService) {
   }
 
   ngOnInit(): void {
-    this.isLoading = true;
+    this.postsService.isLoading = true;
     this.route.params.pipe(takeUntil(this.destroy$), tap((params) => {
       this.postsService.loadPostsByCustomer(params['customerId']).subscribe();
-    })).subscribe(()=> this.isLoading = false);
+    })).subscribe(() => this.postsService.isLoading = false);
   }
 
   ngOnDestroy() {

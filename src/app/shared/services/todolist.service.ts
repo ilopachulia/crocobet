@@ -1,22 +1,23 @@
-import {Injectable, OnDestroy} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject, Observable, Subject} from "rxjs";
-import {switchMap, tap, map, takeUntil} from "rxjs/operators";
-import {Task} from "../../pages/customer-to-do-list/types/types";
-import {CustomersService} from "./customers.service";
+import { Injectable, OnDestroy } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { switchMap, tap, map, takeUntil } from 'rxjs/operators';
+import { Task } from '../../pages/customer-to-do-list/types/types';
+import { CustomersService } from './customers.service';
+import {BASE_URL} from "../constants/base-url";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TodolistService implements OnDestroy {
-  private readonly BASE_URL = 'https://jsonplaceholder.typicode.com/';
   customerTasks$: BehaviorSubject<Task[]> = new BehaviorSubject<Task[]>([]);
-  isLoading$: BehaviorSubject<boolean> =new BehaviorSubject<boolean>(false);
   destroy$ = new Subject<void>();
+  isLoading: boolean = false;
 
-
-  constructor(private http: HttpClient, private customersService: CustomersService) {
-  }
+  constructor(
+    private http: HttpClient,
+    private customersService: CustomersService
+  ) {}
 
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -24,16 +25,20 @@ export class TodolistService implements OnDestroy {
   }
 
   loadToDoListByCustomer(id: Task['userId']): Observable<Task[]> {
-    this.isLoading$.next(true);
-    return this.http.get<Task[]>(`${this.BASE_URL}todos?userId=${id}`).pipe(
+    this.isLoading = true;
+    return this.http.get<Task[]>(`${BASE_URL}todos?userId=${id}`).pipe(
       switchMap((tasks: Task[]) =>
         this.customersService.getCustomers().pipe(
-          map(customers => {
-            return tasks.map(task => {
-              const author = customers.find(customer => customer.id === task.userId);
+          map((customers) => {
+            return tasks.map((task) => {
+              const author = customers.find(
+                (customer) => customer.id === task.userId
+              );
               return {
                 ...task,
-                authorName: author ? `${author.name} ${author.surname}` : 'Unknown Author'
+                authorName: author
+                  ? `${author.name} ${author.surname}`
+                  : 'Unknown Author',
               };
             });
           })
@@ -41,7 +46,7 @@ export class TodolistService implements OnDestroy {
       ),
       tap((tasksWithAuthors: Task[]) => {
         this.customerTasks = tasksWithAuthors;
-        this.isLoading$.next(false);
+        this.isLoading = false;
       }),
       takeUntil(this.destroy$)
     );
@@ -52,6 +57,6 @@ export class TodolistService implements OnDestroy {
   }
 
   get customerTasks(): Task[] {
-    return this.customerTasks$.getValue()
+    return this.customerTasks$.getValue();
   }
 }

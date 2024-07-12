@@ -22,7 +22,6 @@ import {takeUntil} from "rxjs/operators";
 export class PostsComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['authorName', 'body', 'actions'];
   buttonStates: { [id: string]: string } = {};
-  isLoading: boolean = false
   private destroy$: Subject<void> = new Subject<void>();
 
 
@@ -30,10 +29,9 @@ export class PostsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.isLoading = true
     this.postsService.loadPosts()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.isLoading = false);
+      .subscribe();
   }
 
   ngOnDestroy(): void {
@@ -42,11 +40,13 @@ export class PostsComponent implements OnInit, OnDestroy {
   }
 
   openModal(id: string) {
-    this.postsService.loadPostById(id).subscribe(post => {
-      this.dialog.open(ModalComponent, {
-        data: {post: post},
+    this.postsService.loadPostById(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(post => {
+        this.dialog.open(ModalComponent, {
+          data: {post: post},
+        });
       });
-    });
   }
 
   onMouseEnter(id: string) {
